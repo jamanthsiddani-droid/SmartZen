@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-cms-key="package_site_title">Select Package | SmartZen Innovation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        
+        // Sync All Text Elements - Using textContent to preserve formatting and visibility
+        document.querySelectorAll('[data-cms-key]').forEach(el => {
+            const key = el.getAttribute('data-cms-key');
+            if (savedData[key]) el.textContent = savedData[key];
+        });
+
+        // Sync All Media (Images, Videos, Watermarks)
+        document.querySelectorAll('[data-cms-media]').forEach(el => {
+            const key = el.getAttribute('data-cms-media');
+            if (savedData[key]) {
+                if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+                    el.src = savedData[key];
+                } else {
+                    el.style.backgroundImage = `url(${savedData[key]})`;
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; cursor: none; overflow-x: hidden; }
+
+    /* PERSISTENT CURSOR - ABSOLUTE VISIBILITY */
+    #spotlight { position: fixed; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(129, 140, 248, 0.12) 0%, transparent 80%); transform: translate(-50%, -50%); z-index: 9999998; }
+    #cursor { position: fixed; width: 12px; height: 12px; background: #c084fc; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; box-shadow: 0 0 20px #c084fc; pointer-events: none; }
+
+    /* BACKGROUND LOGO WATERMARK */
+    #bg-logo-watermark {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 45vw; height: 45vw; 
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain; opacity: 0.04; filter: blur(35px); z-index: -5; pointer-events: none;
+    }
+
+    .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); z-index: -10; }
+
+    .gradient-text { background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+    
+    .glow-card { transition: all 0.4s ease; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glow-card:hover { border-color: #c084fc; box-shadow: 0 0 30px rgba(192, 132, 252, 0.2); transform: translateY(-5px); }
+
+    /* PRICING STRIKE */
+    .price-strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 3px; color: #94a3b8; font-weight: 700; }
+    .price-green { color: #22c55e; font-weight: 900; }
+
+    .step-indicator { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div id="bg-logo-watermark" data-cms-media="global_logo"></div>
+<div class="stars-bg"></div>
+<div id="spotlight"></div>
+<div id="cursor"></div>
+
+<header class="bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img data-cms-media="global_logo" src="YOUR_LOGO_URL" alt="Logo" class="h-8 w-8 object-contain">
+            <a href="index.html" data-cms-key="brand_name" class="text-2xl font-black gradient-text tracking-tighter uppercase italic">SmartZen</a>
+        </div>
+        <div class="flex gap-3">
+            <a href="login.html" class="bg-slate-800 px-5 py-2 rounded-full text-[11px] font-bold hover:bg-slate-700 transition uppercase pt-3 text-white">School Login</a>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-6 py-16 text-center">
+    
+    <div class="flex justify-center items-center gap-4 mb-12">
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-green-500 text-white"><i class="fas fa-check"></i></div>
+            <span class="text-[9px] font-bold uppercase text-green-500">Details</span>
+        </div>
+        <div class="w-12 h-[2px] bg-indigo-600"></div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-indigo-600 text-white shadow-[0_0_15px_#4f46e5]">2</div>
+            <span class="text-[9px] font-bold uppercase text-indigo-400">Package</span>
+        </div>
+        <div class="w-12 h-[2px] bg-slate-700"></div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-slate-800 text-gray-500">3</div>
+            <span class="text-[9px] font-bold uppercase text-gray-600">Payment</span>
+        </div>
+    </div>
+
+    <h1 class="text-4xl md:text-5xl font-black mb-4 uppercase italic tracking-tighter">
+        <span data-cms-key="package_hero_title">Choose Your</span> <span class="gradient-text" data-cms-key="package_hero_span">Lab Scale</span>
+    </h1>
+    <p class="text-gray-400 max-w-2xl mx-auto mb-12 text-sm italic" data-cms-key="package_hero_sub">Select the student capacity that fits your school's vision for 2026.</p>
+
+    <div class="max-w-3xl mx-auto mb-16 p-6 glow-card rounded-3xl border-2 border-indigo-500/30 bg-indigo-900/10 flex items-start gap-6 text-left">
+        <div class="bg-indigo-600 p-4 rounded-2xl shadow-lg">
+            <i class="fas fa-hand-holding-usd text-2xl text-white"></i>
+        </div>
+        <div>
+            <h4 class="text-white font-bold text-lg mb-1 uppercase tracking-widest italic" data-cms-key="guarantee_title">Fee Substitution Guarantee</h4>
+            <p class="text-gray-300 text-sm leading-relaxed" data-cms-key="guarantee_desc">
+                The <span class="text-indigo-400 font-bold" data-cms-key="reg_fee_display">₹2,000 registration fee</span> acts as your slot booking deposit. Once your lab is live, this entire amount will be <span class="underline decoration-indigo-500">substitued (deducted)</span> from your very first month's partnership payment. Effectively, your registration is free.
+            </p>
+        </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+        
+        <div class="glow-card p-10 rounded-[3rem] flex flex-col text-center">
+            <h3 class="text-gray-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-4" data-cms-key="p1_name">Foundation Hub</h3>
+            <div class="mb-8">
+                <span class="text-2xl font-black text-white" data-cms-key="p1_students">100</span>
+                <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest">Enrolled Students</p>
+            </div>
+            <div class="space-y-2 mb-10">
+                <p class="price-strike" data-cms-key="p1_old_price">₹37,500/mo</p>
+                <p class="text-6xl font-black price-green italic" data-cms-key="p1_final_price">₹3,000</p>
+                <div class="bg-green-950/30 py-2 rounded-xl text-green-400 font-black text-[9px] uppercase tracking-widest border border-green-500/20"><span data-cms-key="scholarship_pct">92%</span> Scholarship Applied</div>
+            </div>
+            <ul class="text-left space-y-4 mb-10 text-[11px] text-gray-400 font-medium">
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p1_f1">All Hardware Kits Included</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p1_f2">Teacher Induction Training</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p1_f3">LMS Performance Dashboard</span></li>
+            </ul>
+            <button onclick="goToPayment('Foundation Hub', 2000)" class="mt-auto bg-indigo-600 py-4 rounded-2xl font-black uppercase text-xs hover:bg-indigo-500 transition shadow-xl text-white">Select & Pay ₹2,000</button>
+        </div>
+
+        <div class="glow-card p-10 rounded-[3rem] flex flex-col text-center border-indigo-500/40 border-2 scale-105 shadow-[0_0_50px_rgba(79,70,229,0.2)] bg-indigo-950/20 relative">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest" data-cms-key="p2_badge">Most Popular</div>
+            <h3 class="text-indigo-300 font-bold uppercase text-[10px] tracking-[0.3em] mb-4" data-cms-key="p2_name">Advanced Hub</h3>
+            <div class="mb-8">
+                <span class="text-2xl font-black text-white" data-cms-key="p2_students">150</span>
+                <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest">Enrolled Students</p>
+            </div>
+            <div class="space-y-2 mb-10">
+                <p class="price-strike" data-cms-key="p2_old_price">₹50,000/mo</p>
+                <p class="text-6xl font-black price-green italic" data-cms-key="p2_final_price">₹4,000</p>
+                <div class="bg-green-950/30 py-2 rounded-xl text-green-400 font-black text-[9px] uppercase tracking-widest border border-green-500/20"><span data-cms-key="scholarship_pct">92%</span> Scholarship Applied</div>
+            </div>
+            <ul class="text-left space-y-4 mb-10 text-[11px] text-gray-400 font-medium">
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p2_f1">Priority Hardware Support</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p2_f2">Advanced AI & Python Lab</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p2_f3">Global Innovation Fest Access</span></li>
+            </ul>
+            <button onclick="goToPayment('Advanced Hub', 2000)" class="mt-auto bg-white text-indigo-900 py-4 rounded-2xl font-black uppercase text-xs hover:bg-indigo-50 transition shadow-xl">Select & Pay ₹2,000</button>
+        </div>
+
+        <div class="glow-card p-10 rounded-[3rem] flex flex-col text-center">
+            <h3 class="text-gray-500 font-bold uppercase text-[10px] tracking-[0.3em] mb-4" data-cms-key="p3_name">Elite Universe</h3>
+            <div class="mb-8">
+                <span class="text-2xl font-black text-white" data-cms-key="p3_students">200</span>
+                <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest">Enrolled Students</p>
+            </div>
+            <div class="space-y-2 mb-10">
+                <p class="price-strike" data-cms-key="p3_old_price">₹56,250/mo</p>
+                <p class="text-6xl font-black price-green italic" data-cms-key="p3_final_price">₹4,500</p>
+                <div class="bg-green-950/30 py-2 rounded-xl text-green-400 font-black text-[9px] uppercase tracking-widest border border-green-500/20"><span data-cms-key="scholarship_pct">92%</span> Scholarship Applied</div>
+            </div>
+            <ul class="text-left space-y-4 mb-10 text-[11px] text-gray-400 font-medium">
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p3_f1">Full Campus Digitization</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p3_f2">Dedicated Tech Mentor</span></li>
+                <li><i class="fas fa-check text-green-500 mr-2"></i> <span data-cms-key="p3_f3">Custom R&D Projects</span></li>
+            </ul>
+            <button onclick="goToPayment('Elite Universe', 2000)" class="mt-auto bg-indigo-600 py-4 rounded-2xl font-black uppercase text-xs hover:bg-indigo-500 transition shadow-xl text-white">Select & Pay ₹2,000</button>
+        </div>
+
+    </div>
+
+    <div class="mt-20">
+        <a href="index.html" class="text-gray-500 hover:text-white transition text-xs font-bold uppercase tracking-widest"><i class="fas fa-arrow-left mr-2"></i> Change Registration Details</a>
+    </div>
+
+</main>
+
+<footer class="py-16 border-t border-white/5 text-center bg-slate-950">
+    <p class="text-gray-800 font-black uppercase tracking-[1.5em] text-[8px] mb-4" data-cms-key="global_footer_text">SmartZen Innovation Labs • Payment Security</p>
+</footer>
+
+<script>
+    // --- CURSOR TRACKING ---
+    document.addEventListener('mousemove', e => {
+        const spotlight = document.getElementById('spotlight');
+        const cursor = document.getElementById('cursor');
+        spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px';
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    });
+
+    // --- SOUND ENGINE ---
+    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+    let audioStarted = false;
+    document.addEventListener('mousedown', async () => { 
+        if (!audioStarted) { await Tone.start(); audioStarted = true; } 
+        synth.triggerAttackRelease("C4", "16n"); 
+    });
+
+    // --- FLOW LOGIC ---
+    function goToPayment(packageName, amount) {
+        localStorage.setItem('selectedPackage', packageName);
+        localStorage.setItem('regFee', amount);
+        window.location.href = 'make-payment.html';
+    }
+</script>
+
+</body>
+</html>

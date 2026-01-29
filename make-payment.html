@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-cms-key="payment_site_title">Secure Payment | SmartZen Innovation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        
+        // Sync All Text Elements
+        document.querySelectorAll('[data-cms-key]').forEach(el => {
+            const key = el.getAttribute('data-cms-key');
+            if (savedData[key]) el.textContent = savedData[key];
+        });
+
+        // Sync All Media (Images, Videos, Watermarks)
+        document.querySelectorAll('[data-cms-media]').forEach(el => {
+            const key = el.getAttribute('data-cms-media');
+            if (savedData[key]) {
+                if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+                    el.src = savedData[key];
+                } else {
+                    el.style.backgroundImage = `url(${savedData[key]})`;
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; cursor: none; overflow-x: hidden; }
+
+    /* MASTER CURSOR */
+    #spotlight { position: fixed; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 80%); transform: translate(-50%, -50%); z-index: 9999998; }
+    #cursor { position: fixed; width: 12px; height: 12px; background: #c084fc; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; box-shadow: 0 0 20px #c084fc; pointer-events: none; }
+
+    /* BACKGROUND LOGO WATERMARK */
+    #bg-logo-watermark {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 45vw; height: 45vw; 
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain; opacity: 0.04; filter: blur(35px); z-index: -5; pointer-events: none;
+    }
+
+    .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); z-index: -10; }
+
+    .gradient-text { background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+    
+    .glow-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); }
+
+    .step-indicator { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div id="bg-logo-watermark" data-cms-media="global_logo"></div>
+<div class="stars-bg"></div>
+<div id="spotlight"></div>
+<div id="cursor"></div>
+
+<header class="bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img data-cms-media="global_logo" src="YOUR_LOGO_URL" alt="Logo" class="h-8 w-8 object-contain">
+            <a href="index.html" data-cms-key="brand_name" class="text-2xl font-black gradient-text tracking-tighter uppercase italic">SmartZen</a>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-6 py-16">
+    
+    <div class="flex justify-center items-center gap-4 mb-12">
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-green-500 text-white"><i class="fas fa-check"></i></div>
+            <span class="text-[9px] font-bold uppercase text-green-500" data-cms-key="step_1_text">Details</span>
+        </div>
+        <div class="w-12 h-[2px] bg-green-500"></div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-green-500 text-white"><i class="fas fa-check"></i></div>
+            <span class="text-[9px] font-bold uppercase text-green-500" data-cms-key="step_2_text">Package</span>
+        </div>
+        <div class="w-12 h-[2px] bg-indigo-600"></div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="step-indicator bg-indigo-600 text-white shadow-[0_0_15px_#4f46e5]">3</div>
+            <span class="text-[9px] font-bold uppercase text-indigo-400" data-cms-key="step_3_text">Payment</span>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10 items-start">
+        
+        <div class="glow-card p-8 rounded-[2.5rem]">
+            <h2 class="text-2xl font-black mb-6 uppercase italic italic" data-cms-key="order_summary_title">Order Summary</h2>
+            
+            <div class="space-y-6 mb-8">
+                <div class="flex justify-between items-center border-b border-white/5 pb-4">
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-widest" data-cms-key="payment_desc_label">Description</p>
+                        <p class="text-white font-bold" id="display-package">Lab Registration Fee</p>
+                    </div>
+                    <p class="text-white font-black" data-cms-key="reg_fee_display">₹2,000</p>
+                </div>
+                
+                <div class="bg-indigo-900/20 p-4 rounded-2xl border border-indigo-500/30">
+                    <p class="text-[10px] text-indigo-300 font-bold leading-relaxed" data-cms-key="payment_info_text">
+                        <i class="fas fa-info-circle mr-2"></i> This ₹2,000 will be automatically deducted from your first month's salary/subscription payment once the lab is operational.
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]" data-cms-key="payment_method_label">Select Payment Method</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="bg-slate-900 border border-indigo-500 p-4 rounded-xl flex items-center justify-center gap-3">
+                        <i class="fas fa-university text-indigo-400"></i> <span class="text-[10px] font-bold">UPI / Net</span>
+                    </button>
+                    <button class="bg-slate-900 border border-white/10 p-4 rounded-xl flex items-center justify-center gap-3 opacity-50 cursor-not-allowed">
+                        <i class="fas fa-credit-card"></i> <span class="text-[10px] font-bold">Card</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="glow-card p-10 rounded-[3rem] border-2 border-indigo-500/30 text-center">
+            <i class="fas fa-shield-alt text-5xl text-indigo-500 mb-6"></i>
+            <h3 class="text-3xl font-black text-white mb-2 uppercase" data-cms-key="secure_checkout_title">Secure Checkout</h3>
+            <p class="text-gray-400 text-sm italic mb-10" data-cms-key="secure_checkout_desc">You are about to secure your school's Innovation Hub slot for 2026.</p>
+            
+            <div class="mb-10">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-2" data-cms-key="amount_pay_label">Amount to Pay</p>
+                <p class="text-6xl font-black text-white" data-cms-key="reg_fee_display">₹2,000</p>
+            </div>
+
+            <button onclick="processPayment()" class="w-full bg-indigo-600 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-[0_0_30px_#4f46e5] transition duration-500 text-white">
+                Pay Securely Now
+            </button>
+            
+            <div class="mt-8 flex justify-center items-center gap-6 opacity-30 grayscale">
+                <i class="fab fa-cc-visa text-2xl"></i>
+                <i class="fab fa-cc-mastercard text-2xl"></i>
+                <i class="fab fa-google-pay text-3xl"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-12 text-center">
+        <a href="select-package.html" class="text-gray-500 hover:text-white transition text-xs font-bold uppercase"><i class="fas fa-arrow-left mr-2"></i> <span data-cms-key="back_packages_text">Back to Packages</span></a>
+    </div>
+
+</main>
+
+<footer class="py-12 border-t border-white/5 text-center bg-slate-950">
+    <p class="text-gray-800 font-black uppercase tracking-[1.5em] text-[8px]" data-cms-key="global_footer_text">SmartZen Encryption Verified • 256-Bit SSL</p>
+</footer>
+
+<script>
+    // CURSOR TRACKING
+    document.addEventListener('mousemove', e => {
+        const spotlight = document.getElementById('spotlight');
+        const cursor = document.getElementById('cursor');
+        spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px';
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    });
+
+    // FLOW LOGIC
+    function processPayment() {
+        // Here you would integrate Razorpay or similar. 
+        // For now, we simulate a successful payment.
+        alert("Payment Successful! Redirecting to Credential Setup...");
+        window.location.href = 'create-login.html';
+    }
+
+    // Load data from previous step
+    window.onload = () => {
+        const selected = localStorage.getItem('selectedPackage');
+        if(selected) {
+            document.getElementById('display-package').innerText = "Registration: " + selected;
+        }
+    };
+</script>
+
+</body>
+</html>
