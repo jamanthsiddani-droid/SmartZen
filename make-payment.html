@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
@@ -106,7 +108,7 @@
                         <p class="text-xs font-bold text-gray-500 uppercase tracking-widest" data-cms-key="payment_desc_label">Description</p>
                         <p class="text-white font-bold" id="display-package">Lab Registration Fee</p>
                     </div>
-                    <p class="text-white font-black" data-cms-key="reg_fee_display">₹2,000</p>
+                    <p class="text-white font-black" data-cms-key="reg_fee_display">₹1</p>
                 </div>
                 
                 <div class="bg-indigo-900/20 p-4 rounded-2xl border border-indigo-500/30">
@@ -136,7 +138,7 @@
             
             <div class="mb-10">
                 <p class="text-[10px] font-bold text-gray-500 uppercase mb-2" data-cms-key="amount_pay_label">Amount to Pay</p>
-                <p class="text-6xl font-black text-white" data-cms-key="reg_fee_display">₹2,000</p>
+                <p class="text-6xl font-black text-white" data-cms-key="reg_fee_display">₹1</p>
             </div>
 
             <button onclick="processPayment()" class="w-full bg-indigo-600 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-[0_0_30px_#4f46e5] transition duration-500 text-white">
@@ -173,10 +175,43 @@
 
     // FLOW LOGIC
     function processPayment() {
-        // Here you would integrate Razorpay or similar. 
-        // For now, we simulate a successful payment.
-        alert("Payment Successful! Redirecting to Credential Setup...");
-        window.location.href = 'create-login.html';
+        // 🚨 REPLACE THIS WITH YOUR TEST KEY ID (rzp_test_...)
+        const testKeyID = "rzp_test_S9cl1bs4zlVfG2"; 
+
+        // Amount: 100 paise = ₹1 (Use this for testing success)
+        const amountInPaise = 100; 
+
+        var options = {
+            "key": testKeyID, 
+            "amount": amountInPaise,
+            "currency": "INR",
+            "name": "SmartZen Innovation",
+            "description": "Registration Fee",
+            
+            // 🚨 CRITICAL FIX: These dummy details prevent the "No method found" error in Test Mode
+            "prefill": {
+                "name": "SmartZen Test",
+                "email": "test@smartzen.in",
+                "contact": "9999999999"
+            },
+            
+            "theme": { "color": "#4f46e5" },
+            
+            "handler": function (response){
+                // Success! Redirect to next step
+                console.log("Success Payment ID: " + response.razorpay_payment_id);
+                window.location.href = 'create-login.html';
+            },
+            "modal": {
+                "ondismiss": function(){ console.log('Payment Closed'); }
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response){
+             alert("Payment Failed: " + response.error.reason);
+        });
+        rzp1.open();
     }
 
     // Load data from previous step
