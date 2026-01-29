@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-cms-key="master_login_title">Master Access | SmartZen Global</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        
+        // Sync All Text Elements
+        document.querySelectorAll('[data-cms-key]').forEach(el => {
+            const key = el.getAttribute('data-cms-key');
+            if (savedData[key]) el.textContent = savedData[key];
+        });
+
+        // Sync All Media (Logos, Videos, Watermarks)
+        document.querySelectorAll('[data-cms-media]').forEach(el => {
+            const key = el.getAttribute('data-cms-media');
+            if (savedData[key]) {
+                if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+                    el.src = savedData[key];
+                } else {
+                    el.style.backgroundImage = `url(${savedData[key]})`;
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; cursor: none; overflow-x: hidden; }
+    
+    /* ABSOLUTE MASTER CURSOR */
+    #spotlight { position: fixed; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(244, 114, 182, 0.1) 0%, transparent 80%); transform: translate(-50%, -50%); z-index: 9999998; }
+    #cursor { position: fixed; width: 12px; height: 12px; background: #f472b6; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; box-shadow: 0 0 20px #f472b6; pointer-events: none; }
+    
+    .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); z-index: -10; }
+    
+    /* ADDED: SYNCABLE WATERMARK */
+    #bg-logo-watermark {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 45vw; height: 45vw; 
+        background-repeat: no-repeat; background-position: center;
+        background-size: contain; opacity: 0.04; filter: blur(35px); z-index: -5; pointer-events: none;
+    }
+
+    .login-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 3rem; }
+    .input-field { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; border-radius: 1rem; color: white; outline: none; }
+</style>
+</head>
+<body>
+
+<div id="bg-logo-watermark" data-cms-media="global_logo"></div>
+<div class="stars-bg"></div>
+<div id="spotlight"></div>
+<div id="cursor"></div>
+
+<main class="container mx-auto px-6 py-20 flex flex-col items-center justify-center min-h-screen">
+    <div class="max-w-md w-full">
+        <div class="login-card p-10 shadow-2xl relative overflow-hidden text-white">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter" data-cms-key="master_card_title">Master HQ Login</h2>
+                <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-2" data-cms-key="master_card_sub">Siddani Jamanth Control</p>
+            </div>
+            
+            <form class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Master ID</label>
+                    <input type="text" id="master_id" placeholder="Master Admin" class="input-field w-full p-5 text-sm">
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Access Key</label>
+                    <input type="password" id="master_key" placeholder="••••••••" class="input-field w-full p-5 text-sm">
+                </div>
+                
+                <button type="button" onclick="verifyMaster()" class="w-full bg-pink-600 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-[0_0_30px_#f472b6] transition duration-500 mt-4 text-white">
+                    Access Control Panel
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    // --- MASTER CURSOR ---
+    document.addEventListener('mousemove', e => {
+        document.getElementById('spotlight').style.left = e.clientX + 'px'; 
+        document.getElementById('spotlight').style.top = e.clientY + 'px';
+        document.getElementById('cursor').style.left = e.clientX + 'px'; 
+        document.getElementById('cursor').style.top = e.clientY + 'px';
+    });
+
+    // --- SECURITY LOGIC ---
+    function verifyMaster() {
+        const id = document.getElementById('master_id').value;
+        const key = document.getElementById('master_key').value;
+        
+        // Credentials matched to your previous request
+        if(id === "admin" && key === "smartzen2026") {
+            localStorage.setItem('masterLoggedIn', 'true');
+            window.location.href = 'master-hq.html';
+        } else {
+            alert("❌ Unauthorized Access Blocked.");
+        }
+    }
+</script>
+
+</body>
+</html>

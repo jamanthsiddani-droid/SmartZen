@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-cms-key="site_title">SmartZen | Innovation Galaxy</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        
+        // Update all Text elements
+        document.querySelectorAll('[data-cms-key]').forEach(el => {
+            const key = el.getAttribute('data-cms-key');
+            if (savedData[key]) el.innerText = savedData[key];
+        });
+
+        // Update all Media (Images, Videos, Watermarks)
+        document.querySelectorAll('[data-cms-media]').forEach(el => {
+            const key = el.getAttribute('data-cms-media');
+            if (savedData[key]) {
+                if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+                    el.src = savedData[key];
+                } else {
+                    el.style.backgroundImage = `url(${savedData[key]})`;
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #e2e8f0; cursor: none; overflow-x: hidden; }
+
+    #spotlight { position: fixed; width: 350px; height: 350px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 80%); transform: translate(-50%, -50%); z-index: 9999998; }
+    #cursor { position: fixed; width: 10px; height: 10px; background: #c084fc; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; box-shadow: 0 0 15px #c084fc; pointer-events: none; }
+
+    #bg-logo-watermark {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 40vw; height: 40vw; background-repeat: no-repeat; background-position: center;
+        background-size: contain; opacity: 0.04; filter: blur(30px); z-index: -5; pointer-events: none;
+    }
+
+    .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%); z-index: -10; }
+    .gradient-text { background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+    .glow-card { transition: all 0.4s ease; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+    .glow-card:hover { border-color: #c084fc; box-shadow: 0 0 25px rgba(192, 132, 252, 0.15); }
+    .solar-system { position: relative; width: 100%; height: 650px; display: flex; align-items: center; justify-content: center; }
+    .central-sun { 
+        position: relative; width: 280px; height: 280px; z-index: 50; 
+        transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        border-radius: 50%; overflow: hidden;
+        border: 4px solid #1e293b;
+        box-shadow: 0 0 70px rgba(129, 140, 248, 0.3);
+    }
+    .central-sun:hover { width: 580px; height: 340px; border-radius: 20px; }
+    .orbit { position: absolute; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 50%; pointer-events: none; }
+    .planet-node { position: absolute; pointer-events: auto; cursor: pointer; transition: transform 0.3s; }
+    .planet-card { padding: 6px 12px; background: rgba(30, 41, 59, 0.9); border: 1px solid #4f46e5; border-radius: 8px; font-size: 12px; font-weight: 700; color: #fff; text-transform: uppercase; white-space: nowrap; }
+    @keyframes rotatePlanets { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .orbit-anim { animation: rotatePlanets var(--speed) linear infinite; }
+    .orbit-anim:hover { animation-play-state: paused; }
+    .scroll-container { overflow: hidden; width: 100%; padding: 30px 0; }
+    .scroll-content { display: flex; width: max-content; animation: marquee 45s linear infinite; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .project-card { width: 340px; margin: 0 15px; flex-shrink: 0; }
+    .price-strike { text-decoration: line-through; text-decoration-color: #ef4444; text-decoration-thickness: 3px; color: #64748b; font-weight: 700; font-size: 1.25rem; }
+    .price-green { color: #22c55e; font-weight: 900; }
+</style>
+</head>
+<body>
+
+<div id="bg-logo-watermark" data-cms-media="global_logo"></div>
+<div class="stars-bg"></div>
+<div id="spotlight"></div>
+<div id="cursor"></div>
+
+<header class="sticky top-0 z-[120] bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img data-cms-media="global_logo" src="YOUR_LOGO_URL" alt="Logo" class="h-8 w-8 object-contain">
+            <a href="#" data-cms-key="brand_name" class="text-2xl font-black gradient-text tracking-tighter uppercase italic">SmartZen</a>
+        </div>
+
+        <div class="hidden lg:flex gap-10">
+            <a href="#partner" class="hover:text-indigo-400 transition flex flex-col items-center gap-1 group">
+                <i class="fas fa-handshake text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Benefits</span>
+            </a>
+            <a href="#curriculum" class="hover:text-indigo-400 transition flex flex-col items-center gap-1 group">
+                <i class="fas fa-graduation-cap text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Curriculum</span>
+            </a>
+            <a href="#projects" class="hover:text-indigo-400 transition flex flex-col items-center gap-1 group">
+                <i class="fas fa-code-branch text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Projects</span>
+            </a>
+            <a href="#vision" class="hover:text-indigo-400 transition flex flex-col items-center gap-1 group">
+                <i class="fas fa-eye text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">Vision</span>
+            </a>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="school-login.html" class="bg-slate-800 px-5 py-2 rounded-full text-[11px] font-bold hover:bg-slate-700 transition uppercase pt-3 text-white text-center flex items-center justify-center">
+                School Login
+            </a>
+            <a href="#registration-form" class="bg-indigo-600 px-5 py-2 rounded-full text-[11px] font-black hover:bg-indigo-500 transition uppercase pt-3 text-white text-center flex items-center justify-center">
+                Register School
+            </a>
+        </div>
+    </nav>
+</header>
+
+<section class="relative pt-12 pb-16 overflow-hidden">
+    <div class="container mx-auto px-6 text-center z-10 relative">
+        <h1 class="text-4xl md:text-5xl font-black mb-8 tracking-tighter leading-tight uppercase italic">
+            <span data-cms-key="hero_title">Innovation Galaxy</span> <span class="gradient-text" data-cms-key="hero_subtitle">with SmartZen</span>
+        </h1>
+        
+        <div class="solar-system" id="galaxy">
+            <div class="central-sun">
+                <iframe data-cms-media="hero_video" class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" allowfullscreen></iframe>
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-indigo-400 font-black text-[8px] uppercase tracking-widest animate-pulse italic">Expand View</div>
+            </div>
+
+            <div class="orbit orbit-anim" style="width: 440px; height: 440px; --speed: 15s;"><div class="planet-node" style="top: 0; left: 50%"><div class="planet-card" data-cms-key="planet_1">Computer Vision</div></div></div>
+            <div class="orbit orbit-anim" style="width: 500px; height: 500px; --speed: 25s;"><div class="planet-node" style="bottom: 10%; right: 20%"><div class="planet-card" data-cms-key="planet_2">Machine Learning</div></div></div>
+            <div class="orbit orbit-anim" style="width: 560px; height: 560px; --speed: 35s;"><div class="planet-node" style="top:20%; left:0"><div class="planet-card" data-cms-key="planet_3">Robotics Engineering</div></div></div>
+            <div class="orbit orbit-anim" style="width: 620px; height: 620px; --speed: 22s;"><div class="planet-node" style="bottom:20%; left:10%"><div class="planet-card" data-cms-key="planet_4">IoT Systems</div></div></div>
+            <div class="orbit orbit-anim" style="width: 680px; height: 680px; --speed: 40s;"><div class="planet-node" style="top:50%; right:0%"><div class="planet-card" data-cms-key="planet_5">Data Science</div></div></div>
+            <div class="orbit orbit-anim" style="width: 740px; height: 740px; --speed: 30s;"><div class="planet-node" style="bottom:0; left:30%"><div class="planet-card" data-cms-key="planet_6">AR-VR Masters</div></div></div>
+            <div class="orbit orbit-anim" style="width: 800px; height: 800px; --speed: 50s;"><div class="planet-node" style="top:10%; right:40%"><div class="planet-card" data-cms-key="planet_7">Cyber Security</div></div></div>
+            <div class="orbit orbit-anim" style="width: 860px; height: 860px; --speed: 45s;"><div class="planet-node" style="right:5%; top:30%"><div class="planet-card" data-cms-key="planet_8">NLP AI</div></div></div>
+            <div class="orbit orbit-anim" style="width: 920px; height: 920px; --speed: 60s;"><div class="planet-node" style="bottom:20%; right:50%"><div class="planet-card" data-cms-key="planet_9">Cloud Architecture</div></div></div>
+            <div class="orbit orbit-anim" style="width: 980px; height: 980px; --speed: 55s;"><div class="planet-node" style="top:40%; left:5%"><div class="planet-card" data-cms-key="planet_10">3D Prototyping</div></div></div>
+        </div>
+    </div>
+</section>
+
+<section id="vision" class="py-20 bg-slate-900/30 border-y border-white/5">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-black gradient-text uppercase italic mb-16 tracking-tighter" data-cms-key="vision_section_title">Our Vision & Mission</h2>
+        <div class="grid lg:grid-cols-2 gap-16 items-start">
+            <div class="space-y-6">
+                <div class="glow-card p-8 rounded-3xl border-l-4 border-indigo-600 text-left">
+                    <h3 class="text-xl font-bold text-white mb-3 italic" data-cms-key="vision_card1_title">Inclusive AI Education</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-cms-key="vision_card1_desc">Democratizing high-end technology for every school starting from Class 1. We bridge the gap between traditional learning and future tech.</p>
+                </div>
+                <div class="glow-card p-8 rounded-3xl border-l-4 border-purple-600 text-left">
+                    <h3 class="text-xl font-bold text-white mb-3 italic" data-cms-key="vision_card2_title">Global STEM Ecosystem</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed" data-cms-key="vision_card2_desc">Preparation for Industry 5.0 through critical thinking. Our mission has impacted 2M+ students globally.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-6 h-[450px]">
+                <div data-cms-media="vision_img_main" class="rounded-2xl border-2 border-dashed border-indigo-500/20 flex items-center justify-center bg-indigo-500/5 glow-card bg-cover bg-center">
+                    <p class="text-indigo-400 font-bold uppercase text-[10px]">Vision Photo</p>
+                </div>
+                <div class="grid grid-rows-2 gap-4">
+                    <div data-cms-media="vision_img_sub1" class="rounded-xl border-2 border-dashed border-white/5 bg-white/5 glow-card bg-cover bg-center"></div>
+                    <div data-cms-media="vision_img_sub2" class="rounded-xl border-2 border-dashed border-white/5 bg-white/5 glow-card bg-cover bg-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-slate-950/50 border-b border-white/5">
+    <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="glow-card p-10 rounded-3xl border-t-4 border-indigo-500">
+            <h3 class="text-4xl font-black text-white mb-2 italic" data-cms-key="stat_students">2000+</h3>
+            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Students Impacted</p>
+        </div>
+        <div class="glow-card p-10 rounded-3xl border-t-4 border-purple-500">
+            <h3 class="text-4xl font-black text-white mb-2 italic" data-cms-key="stat_projects">100+</h3>
+            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Coding Projects</p>
+        </div>
+        <div class="glow-card p-10 rounded-3xl border-t-4 border-blue-500">
+            <h3 class="text-4xl font-black text-white mb-2 italic" data-cms-key="stat_ai">10+</h3>
+            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">AI Prototypes</p>
+        </div>
+        <div class="glow-card p-10 rounded-3xl border-t-4 border-red-500">
+            <h3 class="text-4xl font-black text-white mb-2 italic" data-cms-key="stat_robotics">10+</h3>
+            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Robotic Designs</p>
+        </div>
+    </div>
+</section>
+
+<section id="curriculum" class="py-24">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-black gradient-text uppercase italic mb-4">Advanced Curriculum</h2>
+        <p class="text-indigo-400 font-bold text-xs uppercase mb-16 tracking-widest underline decoration-2">Aligned with NEP 2020 Guidelines</p>
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="glow-card p-6 rounded-[2rem]">
+                <img data-cms-media="curr_img_robotics" src="https://media.istockphoto.com/id/883009420/photo/team-of-small-engineers-working-together-in-laboratory.jpg?s=612x612&w=0&k=20&c=k8_mZ9EknlWDQ-aO2GatFLFS1q1Y99PU3AxW5l7GkAs=" class="rounded-2xl h-52 w-full object-cover mb-6">
+                <h4 class="text-lg font-bold text-white uppercase italic" data-cms-key="curr_title_1">Robotics Labs</h4>
+            </div>
+            <div class="glow-card p-6 rounded-[2rem]">
+                <img data-cms-media="curr_img_ai" src="https://img-c.udemycdn.com/course/750x422/79862_e642_8.jpg" class="rounded-2xl h-52 w-full object-cover mb-6">
+                <h4 class="text-lg font-bold text-white uppercase italic" data-cms-key="curr_title_2">Inclusive AI</h4>
+            </div>
+            <div class="glow-card p-6 rounded-[2rem]">
+                <img data-cms-media="curr_img_coding" src="https://roboto.sg/blog/wp-content/uploads/2022/02/Career-Options-For-Kids-Who-Learn-Robotics.jpg" class="rounded-2xl h-52 w-full object-cover mb-6">
+                <h4 class="text-lg font-bold text-white uppercase italic" data-cms-key="curr_title_3">Future Coding</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="training" class="py-24 border-t border-white/5 bg-slate-950/50">
+    <div class="container mx-auto px-6 flex flex-col lg:flex-row gap-16 items-center">
+        <div class="lg:w-1/2 space-y-6 text-left">
+            <h2 class="text-4xl font-black gradient-text uppercase italic">Teacher Upskilling</h2>
+            <p class="text-lg text-gray-300 font-light italic leading-relaxed" data-cms-key="train_text_main">Dedicated training masterclasses for STEM faculty to lead high-end labs with 100% confidence.</p>
+            <div class="p-6 bg-indigo-600/10 border border-indigo-500/20 rounded-2xl">
+                <h4 class="font-bold text-white text-[10px] mb-3 uppercase tracking-widest italic flex items-center gap-3"><i class="fas fa-chalkboard-teacher text-indigo-400"></i>Expert Induction</h4>
+                <p class="text-gray-400 text-xs italic leading-relaxed" data-cms-key="train_text_sub">Multi-day induction sessions and technical support to ensure effective lab execution.</p>
+            </div>
+        </div>
+        <div class="lg:w-1/2 grid grid-cols-2 gap-6 h-64">
+            <div data-cms-media="train_img_1" class="rounded-2xl border-2 border-dashed border-white/10 bg-white/5 glow-card bg-cover bg-center"></div>
+            <div data-cms-media="train_img_2" class="rounded-2xl border-2 border-dashed border-white/10 bg-white/5 glow-card bg-cover bg-center"></div>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="py-20 bg-slate-900/20 border-y border-white/5 overflow-hidden">
+    <h2 class="text-center text-3xl font-black mb-12 gradient-text uppercase italic tracking-[0.3em]">#SmartZen_Innovators</h2>
+    <div class="scroll-container">
+        <div class="scroll-content">
+            <div class="project-card glow-card p-6 rounded-[2rem] text-center">
+                <div class="rounded-2xl h-48 w-full bg-black overflow-hidden mb-5"><iframe data-cms-media="proj_vid_1" class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div>
+                <h4 class="font-black text-white uppercase text-xs italic tracking-widest" data-cms-key="proj_name_1">Autonomous Van Model</h4>
+            </div>
+            <div class="project-card glow-card p-6 rounded-[2rem] text-center">
+                <img data-cms-media="proj_img_1" src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80" class="rounded-2xl h-48 w-full object-cover mb-5">
+                <h4 class="font-black text-white uppercase text-xs italic tracking-widest" data-cms-key="proj_name_2">AI Health Assistant</h4>
+            </div>
+            <div class="project-card glow-card p-6 rounded-[2rem] text-center"><div class="rounded-2xl h-48 w-full bg-black overflow-hidden mb-5"><iframe data-cms-media="proj_vid_1" class="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe></div><h4 class="font-black text-white uppercase text-xs italic tracking-widest" data-cms-key="proj_name_1">Autonomous Van Model</h4></div>
+            <div class="project-card glow-card p-6 rounded-[2rem] text-center"><img data-cms-media="proj_img_1" src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80" class="rounded-2xl h-48 w-full object-cover mb-5"><h4 class="font-black text-white uppercase text-xs italic tracking-widest" data-cms-key="proj_name_2">AI Health Assistant</h4></div>
+        </div>
+    </div>
+</section>
+
+<section id="partner" class="py-24 bg-slate-950">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-black gradient-text uppercase italic tracking-tighter" data-cms-key="partner_title">Why Partner with Us?</h2>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8 text-left">
+                <div class="p-8 glow-card rounded-[2.5rem] border-l-8 border-green-500 bg-green-900/5">
+                    <h3 class="text-2xl font-black text-white mb-4 uppercase italic" data-cms-key="partner_card_title">NEP 2020 Compliance</h3>
+                    <p class="text-gray-300 text-sm italic leading-relaxed" data-cms-key="partner_card_desc">SmartZen provides certified curricula (CBSE/ICSE) with zero infrastructure hassle for 2026.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-6 bg-slate-800/50 rounded-2xl border border-white/10 text-center glow-card"><i class="fas fa-medal text-indigo-500 text-2xl mb-3"></i><h4 class="font-bold text-white text-[9px] uppercase italic tracking-widest" data-cms-key="partner_item_1">Certified Syllabus</h4></div>
+                    <div class="p-6 bg-slate-800/50 rounded-2xl border border-white/10 text-center glow-card"><i class="fas fa-chart-pie text-indigo-500 text-2xl mb-3"></i><h4 class="font-bold text-white text-[9px] uppercase italic tracking-widest" data-cms-key="partner_item_2">LMS Tracking</h4></div>
+                    <div class="p-6 bg-slate-800/50 rounded-2xl border border-white/10 text-center glow-card"><i class="fas fa-book-open text-indigo-500 text-2xl mb-3"></i><h4 class="font-bold text-white text-[9px] uppercase italic tracking-widest" data-cms-key="partner_item_3">Step-by-Step Books</h4></div>
+                    <div class="p-6 bg-slate-800/50 rounded-2xl border border-white/10 text-center glow-card"><i class="fas fa-trophy text-indigo-500 text-2xl mb-3"></i><h4 class="font-bold text-white text-[9px] uppercase italic tracking-widest" data-cms-key="partner_item_4">Innovation Fest</h4></div>
+                </div>
+                <div class="pt-2">
+                    <button onclick="window.location.href='book-demo.html'" class="bg-white text-indigo-900 px-8 py-3 rounded-full text-md font-black uppercase hover:bg-indigo-600 hover:text-white transition duration-500 shadow-lg">
+                        Book a FREE Demo Today!
+                    </button>
+                </div>
+            </div>
+
+            <div id="registration-form" class="glow-card p-10 rounded-[3.5rem] border-2 border-indigo-500/30 bg-slate-950 shadow-2xl text-left">
+                <h3 class="text-3xl font-black text-white mb-2 text-center uppercase italic">School Registration</h3>
+                <form id="regForm" class="space-y-5">
+                    <input type="text" id="school_name" placeholder="School Name" required class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs focus:border-indigo-500 outline-none">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="email" id="school_email" placeholder="Official Email" required class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs focus:border-indigo-500 outline-none">
+                        <input type="tel" id="school_phone" placeholder="Phone Number" required class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs focus:border-indigo-500 outline-none">
+                    </div>
+                    <select id="school_designation" required class="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs focus:border-indigo-500 text-gray-500 font-bold">
+                        <option value="">Your Designation</option>
+                        <option value="Principal">Principal / Owner</option>
+                        <option value="Management">Management</option>
+                        <option value="IT Head">IT Head</option>
+                    </select>
+                    <button type="button" onclick="validateAndSubmit()" class="w-full bg-indigo-600 py-5 rounded-2xl font-black uppercase tracking-widest text-md hover:shadow-[0_0_30px_#4f46e5] transition mt-4">Submit Portal Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="pricing" class="py-24 bg-slate-950/80 relative text-center">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center justify-center gap-6 mb-16">
+            <img data-cms-media="pricing_badge_gif" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMG5kZ3QxOTBlNTJqaXplc3JrY2F0dDMyMHI3N3NnM2JhaDQ4NGhzZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5k5vZwRFZR5aZeniqb/giphy.gif" class="h-24 rounded-2xl shadow-xl border border-white/5">
+            <div>
+                <h2 class="text-5xl font-black italic tracking-tighter uppercase italic" data-cms-key="pricing_launch_title">Launch Offers 2026</h2>
+                <p class="text-green-500 font-black tracking-[0.8em] uppercase text-[10px] mt-2"><span data-cms-key="scholarship_pct">92%</span> Limited Scholarship Applied</p>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+            <div class="glow-card p-10 rounded-[3rem] text-center border border-white/5">
+                <h4 class="text-gray-500 font-bold mb-6 uppercase text-[9px] tracking-widest">100 Students Plan</h4>
+                <p class="price-strike text-lg" data-cms-key="p1_mo">₹37,500/mo</p>
+                <p class="text-6xl font-black price-green my-6 italic" data-cms-key="p1_final">₹3,000</p>
+                <button class="w-full bg-indigo-600 py-4 rounded-full font-black uppercase text-xs shadow-xl">Enroll Now</button>
+            </div>
+            <div class="glow-card p-10 rounded-[3rem] text-center border border-indigo-500/40 scale-105 shadow-2xl bg-indigo-500/5">
+                <h4 class="text-gray-500 font-bold mb-6 uppercase text-[9px] tracking-widest">150 Students Plan</h4>
+                <p class="price-strike text-lg" data-cms-key="p2_mo">₹50,000/mo</p>
+                <p class="text-6xl font-black price-green my-6 italic" data-cms-key="p2_final">₹4,000</p>
+                <button class="w-full bg-white text-indigo-900 py-4 rounded-full font-black uppercase text-xs shadow-xl">Enroll Now</button>
+            </div>
+            <div class="glow-card p-10 rounded-[3rem] text-center border border-white/5">
+                <h4 class="text-gray-500 font-bold mb-6 uppercase text-[9px] tracking-widest">200 Students Plan</h4>
+                <p class="price-strike text-lg" data-cms-key="p3_mo">₹56,250/mo</p>
+                <p class="text-6xl font-black price-green my-6 italic" data-cms-key="p3_final">₹4,500</p>
+                <button class="w-full bg-indigo-600 py-4 rounded-full font-black uppercase text-xs shadow-xl">Enroll Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="founder" class="py-32 border-t border-white/5 bg-slate-950 text-left">
+    <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center gap-24">
+        <div class="lg:w-1/3">
+            <div class="rounded-full border-8 border-slate-800 shadow-2xl h-[380px] w-[380px] bg-slate-900 overflow-hidden italic">
+                <img data-cms-media="founder_img" src="YOUR_FOUNDER_PHOTO_URL" class="w-full h-full object-cover">
+            </div>
+        </div>
+        <div class="lg:w-2/3 space-y-8">
+            <h2 class="text-7xl font-black gradient-text uppercase italic tracking-tighter">Meet the Founder</h2>
+            <blockquote data-cms-key="founder_quote" class="border-l-4 border-pink-500 pl-6 text-2xl font-bold text-white italic">
+                "We are building a future where every child is a creator, not just a consumer."
+            </blockquote>
+            <h3 class="text-4xl font-bold text-white uppercase tracking-widest leading-tight">
+                <span data-cms-key="founder_name">Your Name</span> <br>
+                <span data-cms-key="founder_role" class="text-indigo-500 text-2xl uppercase tracking-[0.4em] mt-4 block">Chief Visionary & Educator</span>
+            </h3>
+            <p data-cms-key="founder_matter" class="text-gray-400 text-lg italic leading-relaxed">
+                With over a decade of experience in AI research and STEM education, our founder aims to bring high-end lab technology to schools globally, ensuring NEP 2020 compliance and 100% faculty confidence.
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer class="py-20 border-t border-white/5 text-center bg-slate-950">
+    <p data-cms-key="global_footer_text" class="text-gray-800 font-black uppercase tracking-[1.5em] text-[8px] mb-12">SmartZen Innovation Labs • Global HQ</p>
+    <a href="master-admin-login.html" class="opacity-10 hover:opacity-100 transition duration-1000 text-[10px] font-black tracking-widest text-gray-500 uppercase italic underline decoration-indigo-500">@master control panel</a>
+</footer>
+
+<script>
+    // --- GALAXY INTERACTION ---
+    const galaxy = document.getElementById('galaxy');
+    document.addEventListener('mousemove', e => {
+        const spotlight = document.getElementById('spotlight');
+        const cursor = document.getElementById('cursor');
+        spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px';
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+
+        const xAxis = (window.innerWidth/2 - e.pageX)/45;
+        const yAxis = (window.innerHeight/2 - e.pageY)/45;
+        if(galaxy) galaxy.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // --- UPDATED LOGIC: PUSH TO MASTER HQ ---
+    function validateAndSubmit() {
+        const name = document.getElementById('school_name').value;
+        const email = document.getElementById('school_email').value;
+        const phone = document.getElementById('school_phone').value;
+        const desig = document.getElementById('school_designation').value;
+
+        if (name && email && phone && desig) {
+            let requests = JSON.parse(localStorage.getItem('school_requests')) || [];
+            requests.push({
+                school_name: name,
+                school_email: email,
+                school_phone: phone,
+                school_designation: desig,
+                status: 'Pending',
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('school_requests', JSON.stringify(requests));
+            localStorage.setItem('tempSchoolName', name);
+            window.location.href = 'select-package.html';
+        } else {
+            alert("⚠️ Please fill in all details before proceeding.");
+        }
+    }
+
+    // --- TONE.JS AUDIO ---
+    const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+    let audioReady = false;
+    document.addEventListener('mousedown', async () => { if (!audioReady) { await Tone.start(); audioReady = true; } synth.triggerAttackRelease("C4", "16n"); });
+</script>
+
+</body>
+</html>

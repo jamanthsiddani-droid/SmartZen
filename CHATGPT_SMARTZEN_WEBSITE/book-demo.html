@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title data-cms-key="demo_page_title">Book a Demo | SmartZen Innovation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedData = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        
+        // Sync All Text Elements - Using textContent for high-visibility safety
+        document.querySelectorAll('[data-cms-key]').forEach(el => {
+            const key = el.getAttribute('data-cms-key');
+            if (savedData[key]) el.textContent = savedData[key];
+        });
+
+        // Sync All Media (Images, Videos, Watermarks)
+        document.querySelectorAll('[data-cms-media]').forEach(el => {
+            const key = el.getAttribute('data-cms-media');
+            if (savedData[key]) {
+                if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+                    el.src = savedData[key];
+                } else {
+                    el.style.backgroundImage = `url(${savedData[key]})`;
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; cursor: none; overflow-x: hidden; }
+
+    /* ABSOLUTE MASTER CURSOR */
+    #spotlight { position: fixed; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(129, 140, 248, 0.12) 0%, transparent 80%); transform: translate(-50%, -50%); z-index: 9999998; }
+    #cursor { position: fixed; width: 12px; height: 12px; background: #c084fc; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; box-shadow: 0 0 20px #c084fc; pointer-events: none; }
+
+    /* BACKGROUND LOGO WATERMARK */
+    #bg-logo-watermark {
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 45vw; height: 45vw; 
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain; opacity: 0.04; filter: blur(35px); z-index: -5; pointer-events: none;
+    }
+
+    .stars-bg { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%); z-index: -10; }
+
+    .gradient-text { background: linear-gradient(to right, #818cf8, #c084fc, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+    
+    .glow-card { transition: all 0.4s ease; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 3rem; }
+    
+    .input-field { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.3s ease; border-radius: 1rem; color: white; }
+    .input-field:focus { border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.2); outline: none; }
+</style>
+</head>
+<body>
+
+<div id="bg-logo-watermark" data-cms-media="global_logo"></div>
+<div class="stars-bg"></div>
+<div id="spotlight"></div>
+<div id="cursor"></div>
+
+<header class="bg-slate-950/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[100]">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img data-cms-media="global_logo" src="YOUR_LOGO_URL" alt="Logo" class="h-8 w-8 object-contain">
+            <a href="index.html" data-cms-key="brand_name" class="text-2xl font-black gradient-text tracking-tighter uppercase italic">SmartZen</a>
+        </div>
+        <div class="flex gap-3">
+            <a href="school-login.html" class="bg-slate-800 px-5 py-2 rounded-full text-[11px] font-bold hover:bg-slate-700 transition uppercase pt-3 text-white">School Login</a>
+            <a href="index.html#registration-form" class="bg-indigo-600 px-5 py-2 rounded-full text-[11px] font-black hover:bg-indigo-500 transition uppercase pt-3 text-white shadow-lg">Register Hub</a>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-6 py-20">
+    <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="space-y-8">
+            <h1 class="text-5xl font-black text-white uppercase italic tracking-tighter leading-tight" data-cms-key="demo_hero_title">
+                Experience the <br><span class="gradient-text">Future of Education</span>
+            </h1>
+            <p class="text-gray-300 text-lg italic leading-relaxed" data-cms-key="demo_hero_desc">
+                Schedule a personalized virtual tour of the SmartZen ecosystem. See how we turn existing computer labs into high-end AI & Robotics studios with <span class="text-indigo-400 font-bold">Zero Infrastructure Cost</span> for your school.
+            </p>
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 text-gray-400">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center border border-indigo-500/30">
+                        <i class="fas fa-video text-indigo-400"></i>
+                    </div>
+                    <p class="text-sm font-bold uppercase tracking-widest" data-cms-key="demo_feature_1">30-Minute Live Session</p>
+                </div>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center border border-indigo-500/30">
+                        <i class="fas fa-microchip text-indigo-400"></i>
+                    </div>
+                    <p class="text-sm font-bold uppercase tracking-widest" data-cms-key="demo_feature_2">Live Hardware Demo</p>
+                </div>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center border border-indigo-500/30">
+                        <i class="fas fa-chart-line text-indigo-400"></i>
+                    </div>
+                    <p class="text-sm font-bold uppercase tracking-widest" data-cms-key="demo_feature_3">LMS & Curriculum Preview</p>
+                </div>
+            </div>
+
+            <div class="p-6 bg-slate-900/50 rounded-3xl border border-white/5">
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] mb-2">Global Trusted Partner</p>
+                <p class="text-gray-400 text-xs italic" data-cms-key="demo_trusted_text">Trusted by 600+ Institutions worldwide for NEP 2020 transitions.</p>
+            </div>
+        </div>
+
+        <div class="glow-card p-10 shadow-2xl relative border-2 border-indigo-500/30">
+            <h2 class="text-2xl font-black text-white uppercase italic mb-8" data-cms-key="demo_form_title">Request a Demo Slot</h2>
+            
+            <form id="demoForm" class="space-y-5 text-left">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Full Name</label>
+                    <input type="text" id="d_name" placeholder="Principal or Management Name" required class="input-field w-full p-4 text-sm outline-none">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">School Name</label>
+                    <input type="text" id="d_school" placeholder="Enter Full Institution Name" required class="input-field w-full p-4 text-sm outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Email Address</label>
+                        <input type="email" id="d_email" placeholder="admin@school.com" required class="input-field w-full p-4 text-sm outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Phone Number</label>
+                        <input type="tel" id="d_phone" placeholder="+91 XXXX" required class="input-field w-full p-4 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase ml-4">Preferred Slot</label>
+                    <input type="date" id="d_date" required class="input-field w-full p-4 text-sm outline-none text-gray-400">
+                </div>
+
+                <button type="button" onclick="submitDemoRequest()" class="w-full bg-indigo-600 py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] transition duration-500 mt-4 text-white">
+                    Confirm Demo Request
+                </button>
+                
+                <p class="text-center text-[9px] text-gray-600 font-bold uppercase tracking-widest mt-4">
+                    Our technical experts will contact you within 24 hours.
+                </p>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<footer class="py-12 border-t border-white/5 text-center bg-slate-950">
+    <p class="text-gray-800 font-black uppercase tracking-[1.5em] text-[8px]" data-cms-key="global_footer_text">SmartZen Innovation Labs • Global HQ</p>
+</footer>
+
+<script>
+    // --- MASTER CURSOR ---
+    document.addEventListener('mousemove', e => {
+        const spotlight = document.getElementById('spotlight');
+        const cursor = document.getElementById('cursor');
+        spotlight.style.left = e.clientX + 'px'; spotlight.style.top = e.clientY + 'px';
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+    });
+
+    // --- UPDATED VALIDATION & MASTER HQ SYNC LOGIC ---
+    function submitDemoRequest() {
+        const name = document.getElementById('d_name').value;
+        const school = document.getElementById('d_school').value;
+        const email = document.getElementById('d_email').value;
+        const phone = document.getElementById('d_phone').value;
+        const date = document.getElementById('d_date').value;
+
+        if (name && school && email && phone && date) {
+            // TRANSMIT SIGNAL TO MASTER HQ (LocalStorage)
+            let demoRequests = JSON.parse(localStorage.getItem('demo_inquiries')) || [];
+            demoRequests.push({
+                name,
+                school,
+                email,
+                phone,
+                date,
+                timestamp: new Date().toLocaleString(),
+                status: 'New'
+            });
+            localStorage.setItem('demo_inquiries', JSON.stringify(demoRequests));
+
+            alert("🚀 Demo Request Sent! Our technical team will reach out to schedule your session.");
+            window.location.href = 'index.html';
+        } else {
+            alert("⚠️ Please fill in all details (Name, School, Email, Phone, and Date) before confirming.");
+        }
+    }
+</script>
+
+</body>
+</html>

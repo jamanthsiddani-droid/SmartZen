@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER COMMAND HQ | SmartZen Supreme Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --bg: #020617; --panel: #0f172a; --pink: #ec4899; --violet: #8b5cf6; --text: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); overflow: hidden; }
+        
+        .glass-sidebar { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-btn { transition: 0.3s; color: #64748b; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; text-align: left; }
+        .sidebar-btn.active { background: linear-gradient(to right, var(--pink), var(--violet)); color: white; box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3); }
+        
+        .main-scroll { height: calc(100vh - 120px); overflow-y: auto; padding-bottom: 150px; padding-right: 15px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HIGH-CONTRAST INPUTS (Fixed Visibility) */
+        input, textarea, select { 
+            width: 100%; background: #070b14 !important; border: 2px solid #1e293b !important; 
+            padding: 1rem; border-radius: 1.25rem; color: #ffffff !important; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--pink) !important; box-shadow: 0 0 15px rgba(236, 72, 153, 0.2); }
+        
+        label { font-size: 9px; font-weight: 900; color: #475569; text-transform: uppercase; margin-bottom: 6px; display: block; margin-top: 15px; }
+        .preview-box { width: 100%; height: 110px; border-radius: 1rem; border: 2px dashed #1e293b; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #475569; margin-top: 5px; }
+        
+        .section-card { background: rgba(30, 41, 59, 0.3); padding: 2.5rem; border-radius: 3rem; border: 1px solid rgba(255,255,255,0.03); margin-bottom: 2rem; }
+        h3 { font-size: 13px; font-weight: 900; text-transform: uppercase; color: var(--pink); font-style: italic; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        
+        .rank-badge { background: #1e293b; color: #94a3b8; width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside class="w-80 glass-sidebar p-8 flex flex-col justify-between z-50">
+        <div>
+            <div class="mb-10">
+                <h1 class="text-3xl font-black italic text-pink-500 tracking-tighter leading-none">SMARTZEN <span class="text-white">HQ</span></h1>
+                <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mt-2">Executive Command Hub</p>
+            </div>
+            <nav class="space-y-1">
+                <button onclick="switchTab('stats')" class="sidebar-btn active w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-chart-line"></i> Analytics & Traffic</button>
+                <button onclick="switchTab('p-galaxy')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-atom"></i> Galaxy Architect</button>
+                <button onclick="switchTab('p-content')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-eye"></i> Vision & Curriculum</button>
+                <button onclick="switchTab('p-business')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-gem"></i> Pricing & Founder</button>
+                <button onclick="switchTab('p-rankings')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-trophy"></i> Performance Hall</button>
+                <button onclick="switchTab('p-portal')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-shield-halved"></i> School Access</button>
+                <button onclick="switchTab('p-social')" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-2xl transition-all"><i class="fas fa-wifi"></i> Contact & Socials</button>
+            </nav>
+        </div>
+        <div class="space-y-4">
+            <button onclick="deploySync()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs shadow-2xl hover:scale-105 transition-all">Deploy Global Sync</button>
+            <a href="index.html" class="block text-center text-red-500 text-[9px] font-black uppercase tracking-widest hover:underline">Exit Master Mode</a>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-12 overflow-hidden bg-[#020617]">
+        <div class="main-scroll">
+
+            <div id="stats" class="tab-content active">
+                <h2 class="text-5xl font-black mb-10 uppercase italic tracking-tighter">System <span class="text-pink-500">Intelligence</span></h2>
+                
+                <div class="grid grid-cols-4 gap-6 mb-10 text-center">
+                    <div class="section-card p-8 border-b-4 border-blue-500 m-0"><label>Live Traffic</label><h4 class="text-4xl font-black" id="total-traffic-count">42,109</h4></div>
+                    <div class="section-card p-8 border-b-4 border-green-500 m-0"><label>Monthly Revenue</label><h4 class="text-4xl font-black text-green-400 italic">₹4.82L</h4></div>
+                    <div class="section-card p-8 border-b-4 border-purple-500 m-0"><label>Total Schools</label><h4 class="text-4xl font-black">142</h4></div>
+                    <div class="section-card p-8 border-b-4 border-pink-500 m-0"><label>Demo Inquiries</label><h4 class="text-4xl font-black">38</h4></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="section-card p-10 h-[450px]">
+                        <div class="flex justify-between items-center mb-6">
+                            <label>Traffic Velocity Hub</label>
+                            <div class="flex gap-2">
+                                <button onclick="updateTraffic('daily')" class="bg-pink-600 px-3 py-1 rounded text-[9px] font-bold" id="btn-daily">Daily</button>
+                                <button onclick="updateTraffic('weekly')" class="bg-slate-800 px-3 py-1 rounded text-[9px] font-bold" id="btn-weekly">Weekly</button>
+                                <button onclick="updateTraffic('monthly')" class="bg-slate-800 px-3 py-1 rounded text-[9px] font-bold" id="btn-monthly">Monthly</button>
+                                <button onclick="updateTraffic('yearly')" class="bg-slate-800 px-3 py-1 rounded text-[9px] font-bold" id="btn-yearly">Yearly</button>
+                            </div>
+                        </div>
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                    <div class="section-card p-10 h-[450px]">
+                        <label class="mb-6">Monthly Revenue Block</label>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p-galaxy" class="tab-content">
+                <h2 class="text-4xl font-black mb-10 uppercase italic">Galaxy <span class="text-violet-500">Architect</span></h2>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="section-card">
+                        <h3><i class="fas fa-play-circle"></i> Hero Section</h3>
+                        <label>Main Galaxy Heading</label><input type="text" data-cms="hero_title">
+                        <label>Sub-Span (Gradient Text)</label><input type="text" data-cms="hero_subtitle">
+                        <label>Middle YouTube Video Link</label><input type="text" data-cms="hero_video">
+                    </div>
+                    <div class="section-card">
+                        <h3><i class="fas fa-globe"></i> Orbit Names (All 10 Planets)</h3>
+                        <div class="grid grid-cols-2 gap-x-4">
+                            <input type="text" data-cms="planet_1" class="mb-2"> <input type="text" data-cms="planet_2" class="mb-2">
+                            <input type="text" data-cms="planet_3" class="mb-2"> <input type="text" data-cms="planet_4" class="mb-2">
+                            <input type="text" data-cms="planet_5" class="mb-2"> <input type="text" data-cms="planet_6" class="mb-2">
+                            <input type="text" data-cms="planet_7" class="mb-2"> <input type="text" data-cms="planet_8" class="mb-2">
+                            <input type="text" data-cms="planet_9" class="mb-2"> <input type="text" data-cms="planet_10" class="mb-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p-content" class="tab-content">
+                <h2 class="text-4xl font-black mb-10 uppercase italic">Content <span class="text-indigo-400">Mastery</span></h2>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="section-card">
+                        <h3><i class="fas fa-eye"></i> Vision Hub (All 3 Images)</h3>
+                        <label>Main Vision Img</label><input type="file" onchange="up(this,'vision_img_main')"><div id="p-vision_img_main" class="preview-box"></div>
+                        <label>Sub Vision Img 1</label><input type="file" onchange="up(this,'vision_img_sub1')"><div id="p-vision_img_sub1" class="preview-box"></div>
+                        <label>Sub Vision Img 2</label><input type="file" onchange="up(this,'vision_img_sub2')"><div id="p-vision_img_sub2" class="preview-box"></div>
+                    </div>
+                    <div class="section-card">
+                        <h3><i class="fas fa-graduation-cap"></i> Teaching & Curriculum</h3>
+                        <label>Curriculum Img 1 (Robotics)</label><input type="file" onchange="up(this,'curr_img_robotics')"><div id="p-curr_img_robotics" class="preview-box"></div>
+                        <label>Curriculum Img 2 (AI)</label><input type="file" onchange="up(this,'curr_img_ai')"><div id="p-curr_img_ai" class="preview-box"></div>
+                        <label>Curriculum Img 3 (Coding)</label><input type="file" onchange="up(this,'curr_img_coding')"><div id="p-curr_img_coding" class="preview-box"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p-business" class="tab-content">
+                <h2 class="text-4xl font-black mb-10 uppercase italic">Business <span class="text-green-500">Core</span></h2>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="section-card">
+                        <h3><i class="fas fa-tags"></i> 3-Tier Scholarship Control</h3>
+                        <label>P1 Price & Sch %</label><div class="flex gap-2"><input type="text" data-cms="p1_final_price"><input type="text" data-cms="p1_scholarship"></div>
+                        <label>P2 Price & Sch %</label><div class="flex gap-2"><input type="text" data-cms="p2_final_price"><input type="text" data-cms="p2_scholarship"></div>
+                        <label>P3 Price & Sch %</label><div class="flex gap-2"><input type="text" data-cms="p3_final_price"><input type="text" data-cms="p3_scholarship"></div>
+                    </div>
+                    <div class="section-card col-span-2">
+                        <h3><i class="fas fa-user-tie"></i> Meet the Founder Control</h3>
+                        <div class="grid grid-cols-2 gap-10">
+                            <div class="space-y-4">
+                                <label>Founder Full Name</label><input type="text" data-cms="founder_name">
+                                <label>Founder Quote</label><textarea data-cms="founder_quote" class="italic h-20"></textarea>
+                                <label>Founder Biography Matter</label><textarea data-cms="founder_matter" class="h-40"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <label>Profile Portrait</label>
+                                <input type="file" onchange="up(this,'founder_img')">
+                                <div id="p-founder_img" class="h-72 w-72 mx-auto rounded-full bg-slate-800 mt-6 bg-cover bg-center border-4 border-pink-500/20 shadow-2xl"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p-rankings" class="tab-content">
+                <h2 class="text-4xl font-black mb-10 uppercase italic">Performance <span class="text-amber-500">Hall of Fame</span></h2>
+                <div class="section-card">
+                    <h3>Top 3 Innovators (Full Parameters)</h3>
+                    <div class="grid grid-cols-3 gap-8">
+                        <div class="space-y-4 border-r border-white/5 pr-8">
+                            <div class="flex items-center gap-3"><div class="rank-badge bg-amber-500 text-black">1</div><label class="m-0 text-amber-500">Rank #1</label></div>
+                            <label>Name</label><input type="text" data-cms="rank_std1_name">
+                            <label>School</label><input type="text" data-cms="rank_std1_school">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div><label>XP</label><input type="text" data-cms="rank_std1_xp"></div>
+                                <div><label>Badges</label><input type="text" data-cms="rank_std1_badges"></div>
+                                <div><label>%</label><input type="text" data-cms="rank_std1_pct"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4 border-r border-white/5 pr-8 pl-8">
+                            <div class="flex items-center gap-3"><div class="rank-badge bg-slate-400 text-black">2</div><label class="m-0 text-slate-400">Rank #2</label></div>
+                            <label>Name</label><input type="text" data-cms="rank_std2_name">
+                            <label>School</label><input type="text" data-cms="rank_std2_school">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div><label>XP</label><input type="text" data-cms="rank_std2_xp"></div>
+                                <div><label>Badges</label><input type="text" data-cms="rank_std2_badges"></div>
+                                <div><label>%</label><input type="text" data-cms="rank_std2_pct"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4 pl-8">
+                            <div class="flex items-center gap-3"><div class="rank-badge bg-orange-700 text-white">3</div><label class="m-0 text-orange-700">Rank #3</label></div>
+                            <label>Name</label><input type="text" data-cms="rank_std3_name">
+                            <label>School</label><input type="text" data-cms="rank_std3_school">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div><label>XP</label><input type="text" data-cms="rank_std3_xp"></div>
+                                <div><label>Badges</label><input type="text" data-cms="rank_std3_badges"></div>
+                                <div><label>%</label><input type="text" data-cms="rank_std3_pct"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="p-portal" class="tab-content">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-4xl font-black uppercase italic">School Access Hub</h2>
+                    <button onclick="globalMonthlyReset()" class="bg-amber-600 hover:bg-amber-500 px-8 py-3 rounded-2xl font-black uppercase text-[10px] transition shadow-xl border border-amber-400/20">
+                        <i class="fas fa-undo-alt mr-2"></i> Monthly Global Unlock
+                    </button>
+                </div>
+                <div class="section-card">
+                    <h3>Registered Institutions & Remote God-Mode Entry</h3>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-[9px] text-gray-500 uppercase border-b border-white/5 font-black">
+                                <th class="pb-6">Institution</th><th class="pb-6 text-center">Status</th><th class="pb-6 text-center">Roster Lock</th><th class="pb-6 text-right">Master Override</th>
+                            </tr>
+                        </thead>
+                        <tbody id="school-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="p-social" class="tab-content">
+                <h2 class="text-4xl font-black mb-10 uppercase italic">Social <span class="text-red-500">Matrix</span></h2>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="section-card">
+                        <h3>HQ Contact Details</h3>
+                        <label>Phone Line</label><input type="text" data-cms="contact_phone">
+                        <label>Email Hub</label><input type="text" data-cms="contact_email">
+                        <label>Address</label><textarea data-cms="contact_address" class="h-32"></textarea>
+                    </div>
+                    <div class="section-card">
+                        <h3>Social Media Sync Links</h3>
+                        <label>LinkedIn Link</label><input type="text" data-cms="link_linkedin">
+                        <label>Instagram Link</label><input type="text" data-cms="link_instagram">
+                        <label>Twitter Link</label><input type="text" data-cms="link_twitter">
+                        <label>YouTube Channel</label><input type="text" data-cms="link_youtube">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('smartzen_cms_data')) || {};
+        let tChart;
+
+        const tData = {
+            daily: [4200, 5100, 4800, 6200, 5900, 7100, 8400],
+            weekly: [28000, 32000, 31000, 42109],
+            monthly: [85000, 92000, 110000, 145000],
+            yearly: [1200000, 1450000, 1800000]
+        };
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function up(input, key) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                db[key] = reader.result;
+                const p = document.getElementById('p-' + key);
+                if(p) { p.style.backgroundImage = `url(${reader.result})`; p.innerText = ""; }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deploySync() {
+            document.querySelectorAll('[data-cms]').forEach(el => db[el.getAttribute('data-cms')] = el.value);
+            localStorage.setItem('smartzen_cms_data', JSON.stringify(db));
+            alert("🚀 GALAXY SYNCHRONIZED: Every page and portal is updated.");
+        }
+
+        function loadActivity() {
+            const sList = document.getElementById('school-list');
+            const schools = JSON.parse(localStorage.getItem('school_requests')) || [];
+            sList.innerHTML = schools.map((s, i) => `
+                <tr class="border-b border-white/5 text-xs">
+                    <td class="py-8 font-bold text-white uppercase italic">${s.school_name}</td>
+                    <td class="text-center font-black ${s.status==='Approved'?'text-green-500':'text-amber-500'}">${s.status || 'PENDING'}</td>
+                    <td class="text-center font-black ${s.locked?'text-red-500':'text-blue-400'}">${s.locked ? 'LOCKED' : 'OPEN'}</td>
+                    <td class="text-right space-x-2">
+                        <button onclick="approve(${i})" class="bg-indigo-600 px-4 py-2 rounded-xl font-black uppercase text-[9px]">Approve</button>
+                        <button onclick="masterEnter('${s.school_name}')" class="bg-pink-600 px-4 py-2 rounded-xl font-black uppercase text-[9px] shadow-lg">Enter Dashboard</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function masterEnter(schoolName) {
+            localStorage.setItem('tempSchoolName', schoolName);
+            localStorage.setItem('viewMode', 'MasterAdmin');
+            window.open('school-dash.html', '_blank');
+        }
+
+        function globalMonthlyReset() {
+            if(confirm("Global Unlock? This opens all locked performance rosters for a new month.")) {
+                let schools = JSON.parse(localStorage.getItem('school_requests')) || [];
+                schools.forEach(s => s.locked = false);
+                localStorage.setItem('school_requests', JSON.stringify(schools));
+                alert("All portals unlocked globally.");
+                loadActivity();
+            }
+        }
+
+        function approve(i) {
+            let schools = JSON.parse(localStorage.getItem('school_requests'));
+            schools[i].status = 'Approved';
+            localStorage.setItem('school_requests', JSON.stringify(schools));
+            loadActivity();
+        }
+
+        function updateTraffic(type) {
+            document.querySelectorAll('.bg-pink-600').forEach(b => { if(b.id !== 'deploy-btn') b.className = "bg-slate-800 px-3 py-1 rounded text-[9px] font-bold"; });
+            const b = document.getElementById('btn-' + type);
+            b.classList.remove('bg-slate-800'); b.classList.add('bg-pink-600');
+            tChart.data.labels = type==='daily'?['Mon','Tue','Wed','Thu','Fri','Sat','Sun']:type==='weekly'?['Wk 1','Wk 2','Wk 3','Wk 4']:type==='monthly'?['Oct','Nov','Dec','Jan']:['2023','2024','2025'];
+            tChart.data.datasets[0].data = tData[type];
+            tChart.update();
+            document.getElementById('total-traffic-count').innerText = tData[type][tData[type].length-1].toLocaleString();
+        }
+
+        function initCharts() {
+            const ctxT = document.getElementById('trafficChart').getContext('2d');
+            tChart = new Chart(ctxT, {
+                type: 'line',
+                data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ data: tData.daily, borderColor: '#ec4899', tension: 0.4, fill: true, backgroundColor: 'rgba(236,72,153,0.1)' }] },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            });
+            new Chart(document.getElementById('revenueChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: ['Oct','Nov','Dec','Jan'], datasets: [{ data: [2.5, 3.1, 4.2, 4.8], backgroundColor: '#8b5cf6', borderRadius: 15 }] },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            });
+        }
+
+        window.onload = () => {
+            if(localStorage.getItem('masterLoggedIn') !== 'true') window.location.href = 'master-admin-login.html';
+            document.querySelectorAll('[data-cms]').forEach(el => { if(db[el.getAttribute('data-cms')]) el.value = db[el.getAttribute('data-cms')]; });
+            ['vision_img_main', 'vision_img_sub1', 'vision_img_sub2', 'curr_img_robotics', 'curr_img_ai', 'curr_img_coding', 'founder_img'].forEach(k => {
+                if(db[k]) { const p = document.getElementById('p-'+k); if(p) { p.style.backgroundImage = `url(${db[k]})`; p.innerText = ""; } }
+            });
+            loadActivity();
+            initCharts();
+        };
+    </script>
+    <script>
+    function masterEnter(schoolName) {
+        // SET SUPER ADMIN PRIVILEGES
+        localStorage.setItem('tempSchoolName', schoolName);
+        localStorage.setItem('viewMode', 'MasterAdmin'); // This is the secret key
+        
+        // Open Dashboard in a new window/tab
+        window.location.href = 'school-dash.html';
+    }
+
+    function globalMonthlyReset() {
+        if(confirm("Clear all monthly locks? Schools will be able to edit for the new month.")) {
+            let schools = JSON.parse(localStorage.getItem('school_requests')) || [];
+            schools.forEach(s => s.locked = false);
+            localStorage.setItem('school_requests', JSON.stringify(schools));
+            alert("All school rosters unlocked globally.");
+            loadActivity();
+        }
+    }
+</script>
+</body>
+</html>
